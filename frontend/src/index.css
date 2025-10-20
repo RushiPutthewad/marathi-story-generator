@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Noto Sans Devanagari', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50;
+    @apply dark:from-gray-900 dark:via-gray-800 dark:to-gray-700;
+    @apply min-h-screen;
+  }
+}
+
+@layer components {
+  .gradient-bg {
+    @apply bg-gradient-to-r from-primary-400 via-secondary-500 to-primary-600;
+    @apply dark:from-primary-600 dark:via-secondary-700 dark:to-primary-800;
+  }
+
+  .story-card {
+    @apply bg-white/80 backdrop-blur-sm border border-white/20;
+    @apply dark:bg-gray-800/80 dark:border-gray-700/20;
+    @apply rounded-2xl shadow-xl;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500;
+    @apply hover:from-primary-600 hover:to-secondary-600;
+    @apply text-white font-medium rounded-xl shadow-lg;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:shadow-xl;
+    @apply active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20;
+    @apply hover:bg-white/20 text-gray-700 dark:text-gray-300;
+    @apply font-medium rounded-xl shadow-lg;
+    @apply transform transition-all duration-300;
+    @apply hover:scale-105 hover:shadow-xl;
+    @apply active:scale-95;
+  }
+
+  .floating-particles::before {
+    content: '';
+    @apply absolute inset-0 opacity-30;
+    background-image: radial-gradient(2px 2px at 20px 30px, rgba(255,165,0,0.3), transparent),
+                      radial-gradient(2px 2px at 40px 70px, rgba(255,140,0,0.4), transparent),
+                      radial-gradient(1px 1px at 90px 40px, rgba(255,69,0,0.3), transparent),
+                      radial-gradient(1px 1px at 130px 80px, rgba(255,215,0,0.4), transparent),
+                      radial-gradient(2px 2px at 160px 30px, rgba(255,165,0,0.3), transparent);
+    background-repeat: repeat;
+    background-size: 200px 100px;
+    animation: float 20s linear infinite;
+  }
+}
