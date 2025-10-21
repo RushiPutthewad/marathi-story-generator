@@ -1,7 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
 import axios from 'axios';
-
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 // Generate Marathi story using Google AI Studio
 export const generateStory = async (req, res) => {
@@ -15,9 +12,6 @@ export const generateStory = async (req, res) => {
       return res.status(400).json({ success: false, error: 'Prompt is required.' });
     }
 
-    // Use gemini-1.5-flash model
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     const storyPrompt = `
 वापरकर्त्याने दिलेल्या कल्पनेवर आधारित एक सुंदर, प्रेरणादायी मराठी गोष्ट तयार करा.
 गोष्ट मध्ये नैतिकता असावी आणि सोप्या भाषेत सांगावी.
@@ -30,16 +24,42 @@ export const generateStory = async (req, res) => {
 
 मराठी गोष्ट:`;
 
-    const result = await model.generateContent(storyPrompt);
-    const response = await result.response;
-    const story = response.text();
+    const storyResponse = await axios.post(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+      {
+        contents: [{
+          parts: [{ text: storyPrompt }]
+        }]
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-goog-api-key': process.env.GOOGLE_API_KEY
+        }
+      }
+    );
+
+    const story = storyResponse.data.candidates[0].content.parts[0].text;
 
     // Extract key scenes for image generation
     const imagePrompt = `Based on this Marathi story, provide 3 key visual scenes in English that would make good illustrations. Just list them as: Scene 1: [description], Scene 2: [description], Scene 3: [description]\n\nStory: ${story}`;
 
-    const imageResult = await model.generateContent(imagePrompt);
-    const imageResponse = await imageResult.response;
-    const scenes = imageResponse.text();
+    const imageResponse = await axios.post(
+      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+      {
+        contents: [{
+          parts: [{ text: imagePrompt }]
+        }]
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-goog-api-key': process.env.GOOGLE_API_KEY
+        }
+      }
+    );
+
+    const scenes = imageResponse.data.candidates[0].content.parts[0].text;
 
     res.json({
       success: true,

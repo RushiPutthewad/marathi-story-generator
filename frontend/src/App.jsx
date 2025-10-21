@@ -6,8 +6,7 @@ import html2canvas from 'html2canvas';
 import { RefreshCw, Send, Download, Wand2 } from 'lucide-react';
 
 import Header from './components/Header';
-import StoryDisplay from './components/StoryDisplay';
-import ImageGallery from './components/ImageGallery';
+import StoryWithImages from './components/StoryWithImages';
 import Loader from './components/Loader';
 import { translations } from './utils/translations';
 
@@ -332,21 +331,15 @@ function App() {
             {isGeneratingImages && <Loader type="image" language={language} />}
           </AnimatePresence>
 
-          {/* Story Display */}
+          {/* Story with Images */}
           <AnimatePresence>
             {story && (
-              <StoryDisplay 
-                story={story} 
+              <StoryWithImages 
+                story={story}
+                images={images}
                 onDownload={downloadPDF}
                 language={language}
               />
-            )}
-          </AnimatePresence>
-
-          {/* Image Gallery */}
-          <AnimatePresence>
-            {images.length > 0 && (
-              <ImageGallery images={images} language={language} />
             )}
           </AnimatePresence>
         </div>
